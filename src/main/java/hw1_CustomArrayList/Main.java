@@ -1,6 +1,6 @@
-package org.example.hw1;
+package hw1_CustomArrayList;
 
-public class Homework1 {
+public class Main {
     public static void main(String[] args) {
 
     }
