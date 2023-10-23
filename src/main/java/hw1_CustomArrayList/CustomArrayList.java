@@ -102,43 +102,36 @@ public class CustomArrayList<E> {
     }
 
     public void sort(Comparator<? super E> c) {
-        // Вызываем вспомогательный метод для сортировки элементов
         quickSort(0, size - 1, c);
     }
 
     private void quickSort(int low, int high, Comparator<? super E> c) {
         if (low < high) {
-            // Разбиваем массив и получаем индекс опорного элемента
             int pivotIndex = partition(low, high, c);
 
-            // Рекурсивно сортируем две половины массива
             quickSort(low, pivotIndex - 1, c);
             quickSort(pivotIndex + 1, high, c);
         }
     }
 
     private int partition(int low, int high, Comparator<? super E> c) {
-        // Выбираем опорный элемент
         E pivot = (E) items[high];
 
         int i = low - 1;
 
         for (int j = low; j < high; j++) {
-            // Если текущий элемент меньше или равен опорному, меняем их местами
             if (c.compare((E) items[j], pivot) <= 0) {
                 i++;
                 swap(i, j);
             }
         }
 
-        // Помещаем опорный элемент на правильное место
         swap(i + 1, high);
 
         return i + 1;
     }
 
     private void swap(int i, int j) {
-        // Меняем местами элементы в массиве
         Object temp = items[i];
         items[i] = items[j];
         items[j] = temp;
