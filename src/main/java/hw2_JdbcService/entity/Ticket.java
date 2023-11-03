@@ -1,22 +1,21 @@
 package hw2_JdbcService.entity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Ticket {
     private Long id;
-
-    private String passengerN;
+    private String passengerNo;
     private String passengerName;
-    private Flight flight;
+    private Long flightId;
     private String seatNo;
-
     private BigDecimal cost;
 
-    public Ticket(Long id, String passengerN, String passengerName, Flight flight, String seatNo, BigDecimal cost) {
+    public Ticket(Long id, String passengerNo, String passengerName, Long flightId, String seatNo, BigDecimal cost) {
         this.id = id;
-        this.passengerN = passengerN;
+        this.passengerNo = passengerNo;
         this.passengerName = passengerName;
-        this.flight = flight;
+        this.flightId = flightId;
         this.seatNo = seatNo;
         this.cost = cost;
     }
@@ -32,12 +31,12 @@ public class Ticket {
         this.id = id;
     }
 
-    public String getPassengerN() {
-        return passengerN;
+    public String getPassengerNo() {
+        return passengerNo;
     }
 
-    public void setPassengerN(String passengerN) {
-        this.passengerN = passengerN;
+    public void setPassengerNo(String passengerNo) {
+        this.passengerNo = passengerNo;
     }
 
     public String getPassengerName() {
@@ -48,12 +47,12 @@ public class Ticket {
         this.passengerName = passengerName;
     }
 
-    public Flight getFlight() {
-        return flight;
+    public Long getFlightId() {
+        return flightId;
     }
 
-    public void setFlight(Flight flight) {
-        this.flight = flight;
+    public void setFlightId(Long flightId) {
+        this.flightId = flightId;
     }
 
     public String getSeatNo() {
@@ -73,15 +72,27 @@ public class Ticket {
     }
 
     @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Ticket ticket = (Ticket) object;
+        return Objects.equals(id, ticket.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
     public String toString() {
         return "Ticket{" +
                "id=" + id +
-               ", passengerN='" + passengerN + '\'' +
+               ", passengerNo='" + passengerNo + '\'' +
                ", passengerName='" + passengerName + '\'' +
-               ", flight=" + flight +
+               ", flightId=" + flightId +
                ", seatNo='" + seatNo + '\'' +
                ", cost=" + cost +
                '}';
     }
-
 }

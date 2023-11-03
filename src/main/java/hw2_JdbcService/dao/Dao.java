@@ -1,19 +1,17 @@
 package hw2_JdbcService.dao;
 
-import hw2_JdbcService.entity.Ticket;
-
 import java.util.List;
 import java.util.Optional;
 
-public interface Dao<K,E> {
+public interface Dao<K, T> {
+    List<T> findAll();
+
+    Optional<T> findByID(K id);
+
     boolean delete(K id);
 
-    E save(Ticket ticket);
+    void update(T entity);
 
-    void update(E ticket);
-
-    Optional<E> findById(K id);
-
-    List<E> findAll();
+    T save(T entity);
 
 }

@@ -1,39 +1,52 @@
 package hw2_JdbcService.dao;
 
 import hw2_JdbcService.entity.Flight;
-import hw2_JdbcService.entity.Ticket;
-import hw2_JdbcService.exception.DaoException;
+import hw2_JdbcService.entity.FlightStatus;
 import hw2_JdbcService.util.ConnectionManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class FlightDao implements Dao<Long, Flight> {
-   private static final FlightDao INSTANCE = new FlightDao();
-    public static final String FIND_BY_ID_SQL = """
-               SELECT id,
-               flight_no,
-               departure_date,
-               departure_airport_code,
-               arrival_date,
-               arrival_airport_code,
-               status,
-               aircraft_id
-               FROM flight
-               WHERE id = ?
-            """;
+
+    private final static FlightDao INSTANCE = new FlightDao();
 
     private FlightDao() {
     }
 
-    public static FlightDao getInstance() {
-        return INSTANCE;
+    //language=PostgreSQL
+    public static final String FIND_ALL = """
+            SELECT id,
+            flight_no,
+            departure_date,
+            departure_airport_code,
+            arrival_date,
+            arrival_airport_code,
+            aircraft_id,
+            status FROM flight
+            """;
+
+    @Override
+    public List<Flight> findAll() {
+        try (Connection connection = ConnectionManager.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Flight> flights = new ArrayList<>();
+            while (resultSet.next()) {
+                flights.add(buildFlight(resultSet));
+            }
+            return flights;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    @Override
+    public Optional<Flight> findByID(Long id) {
+        return Optional.empty();
+    }
 
     @Override
     public boolean delete(Long id) {
@@ -41,51 +54,34 @@ public class FlightDao implements Dao<Long, Flight> {
     }
 
     @Override
-    public Flight save(Ticket ticket) {
+    public void update(Flight entity) {
+
+    }
+
+    @Override
+    public Flight save(Flight entity) {
         return null;
     }
 
-    @Override
-    public void update(Flight ticket) {
-
-    }
-
-
-    @Override
-    public Optional<Flight> findById(Long id) {
-        try (Connection connection = ConnectionManager.get()) {
-            return findById(id,connection);
+    private Flight buildFlight(ResultSet resultSet) {
+        try {
+            return new Flight(
+                    resultSet.getObject("id", Long.class),
+                    resultSet.getObject("flight_no", String.class),
+                    resultSet.getObject("departure_date", Timestamp.class).toLocalDateTime(),
+                    resultSet.getObject("departure_airport_code", String.class),
+                    resultSet.getObject("arrival_date", Timestamp.class).toLocalDateTime(),
+                    resultSet.getObject("arrival_airport_code", String.class),
+                    resultSet.getObject("aircraft_id", Integer.class),
+                    FlightStatus.valueOf(resultSet.getObject("status", String.class))
+            );
         } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-    }
-    public Optional<Flight> findById(Long id, Connection connection) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
-            preparedStatement.setLong(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            Flight flight = null;
-            while (resultSet.next()) {
-                flight = new Flight(
-                        resultSet.getLong("id"),
-                        resultSet.getString("flight_no"),
-                        resultSet.getTimestamp("departure_date").toLocalDateTime(),
-                        resultSet.getString("departure_airport_code"),
-                        resultSet.getTimestamp("arrival_date").toLocalDateTime(),
-                        resultSet.getString("arrival_airport_code"),
-                        resultSet.getInt("aircraft_id"),
-                        resultSet.getString("status")
-
-
-                );
-            }
-            return Optional.ofNullable(flight);
-        } catch (SQLException e) {
-            throw new DaoException(e);
+            throw new RuntimeException(e);
         }
     }
 
-    @Override
-    public List<Flight> findAll() {
-        return null;
+    public static FlightDao getInstance() {
+        return INSTANCE;
     }
+
 }
