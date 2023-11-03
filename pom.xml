@@ -6,7 +6,6 @@
   <artifactId>ASTON-DEV</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-
   <name>ASTON-DEV</name>
   <url>http://maven.apache.org</url>
 
@@ -21,6 +20,39 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>commons-lang</groupId>
+          <artifactId>commons-lang</artifactId>
+          <version>2.6</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.projectlombok</groupId>
+          <artifactId>lombok</artifactId>
+          <version>1.18.30</version>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>jakarta.servlet</groupId>
+          <artifactId>jakarta.servlet-api</artifactId>
+          <version>6.0.0</version>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.postgresql</groupId>
+          <artifactId>postgresql</artifactId>
+          <version>42.6.0</version>
+      </dependency>
+      <dependency>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+          <version>2.10.1</version>
+      </dependency>
+      <dependency>
+          <groupId>jakarta.ws.rs</groupId>
+          <artifactId>jakarta.ws.rs-api</artifactId>
+          <version>3.1.0</version>
+      </dependency>
   </dependencies>
     <build>
         <plugins>
@@ -28,8 +60,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>10</source>
-                    <target>10</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
         </plugins>
