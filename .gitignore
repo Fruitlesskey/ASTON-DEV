@@ -79,3 +79,6 @@ $RECYCLE.BIN/
 # Gradle
 classes
 .scannerwork/
+!/out/
+!/out/
+!/.idea/
